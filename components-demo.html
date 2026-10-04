@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Components Demo - Video Admin</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <style>
+    .demo-section {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .demo-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container" style="max-width: 1000px; margin: 40px auto;">
+    <div class="page-header">
+      <div>
+        <h1 class="page-header__title">Bộ UI Components Demo</h1>
+        <p class="text-secondary">Trang kiểm tra các thành phần giao diện theo docs/05-UI-GUIDELINES.md</p>
+      </div>
+      <a href="login.html" class="btn btn--primary">Đến trang Đăng nhập &rarr;</a>
+    </div>
+
+    <!-- Buttons -->
+    <div class="demo-section">
+      <h2 class="demo-title">1. Nút bấm (Buttons)</h2>
+      <div class="demo-row">
+        <button class="btn btn--primary">Nút chính (Primary)</button>
+        <button class="btn btn--secondary">Nút phụ (Secondary)</button>
+        <button class="btn btn--danger">Nút xóa (Danger)</button>
+        <button class="btn btn--outline-danger">Viền đỏ</button>
+        <button class="btn btn--primary btn--sm">Nút nhỏ (Small)</button>
+        <button class="btn btn--primary" disabled>Bị vô hiệu hóa</button>
+      </div>
+    </div>
+
+    <!-- Badges -->
+    <div class="demo-section">
+      <h2 class="demo-title">2. Nhãn trạng thái (Badges)</h2>
+      <div class="demo-row">
+        <span class="badge badge--admin">ADMIN</span>
+        <span class="badge badge--user">USER</span>
+        <span class="badge badge--published">PUBLISHED</span>
+        <span class="badge badge--active">ACTIVE</span>
+        <span class="badge badge--draft">DRAFT</span>
+        <span class="badge badge--hidden">HIDDEN</span>
+        <span class="badge badge--locked">LOCKED</span>
+      </div>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="demo-section">
+      <h2 class="demo-title">3. Thẻ thống kê Dashboard (Stat Cards)</h2>
+      <div class="grid-stats">
+        <div class="stat-card stat-card--primary">
+          <div class="stat-card__icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+          </div>
+          <div class="stat-card__content">
+            <div class="stat-card__title">Tổng số video</div>
+            <div class="stat-card__value">16</div>
+            <div class="stat-card__sub">14 video đã xuất bản</div>
+          </div>
+        </div>
+
+        <div class="stat-card stat-card--success">
+          <div class="stat-card__icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+          </div>
+          <div class="stat-card__content">
+            <div class="stat-card__title">Tổng lượt xem</div>
+            <div class="stat-card__value">158,3K</div>
+            <div class="stat-card__sub">Toàn thời gian</div>
+          </div>
+        </div>
+
+        <div class="stat-card stat-card--warning">
+          <div class="stat-card__icon">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7z"></path><path d="M9 12h6m-6 4h4"></path></svg>
+          </div>
+          <div class="stat-card__content">
+            <div class="stat-card__title">Dung lượng lưu trữ</div>
+            <div class="stat-card__value">4.21 GB</div>
+            <div class="stat-card__sub">Tổng dung lượng video</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inputs & Forms -->
+    <div class="demo-section">
+      <h2 class="demo-title">4. Form & Ô nhập liệu (Inputs)</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="form-group">
+          <label class="form-label form-label--required">Tiêu đề video</label>
+          <input type="text" class="form-input" placeholder="Nhập tiêu đề...">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Danh mục</label>
+          <select class="form-select">
+            <option>Giáo dục</option>
+            <option>Công nghệ</option>
+            <option>Giải trí</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ô có lỗi mẫu</label>
+        <input type="text" class="form-input has-error" value="Dữ liệu sai">
+        <div class="form-error">Vui lòng nhập định dạng hợp lệ.</div>
+      </div>
+    </div>
+
+    <!-- Toasts & Modal Actions -->
+    <div class="demo-section">
+      <h2 class="demo-title">5. Hộp thoại & Thông báo (Modal & Toast)</h2>
+      <div class="demo-row">
+        <button id="btn-toast-success" class="btn btn--secondary">Toast Thành công</button>
+        <button id="btn-toast-error" class="btn btn--secondary">Toast Lỗi</button>
+        <button id="btn-open-modal" class="btn btn--primary">Mở Modal Thử nghiệm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal mẫu -->
+  <div id="demo-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Hộp thoại thử nghiệm</h3>
+        <button id="demo-modal-close" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Đây là hộp thoại modal chuẩn theo phong cách light mode. Bấm phím Esc hoặc bấm ra ngoài để đóng.</p>
+      </div>
+      <div class="modal-footer">
+        <button id="demo-modal-cancel" class="btn btn--secondary">Hủy bỏ</button>
+        <button id="demo-modal-confirm" class="btn btn--primary">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-container"></div>
+
+  <script type="module">
+    import { showToast } from './js/components/toast.js';
+
+    document.getElementById('btn-toast-success').addEventListener('click', () => {
+      showToast('Thao tác thành công rực rỡ!', 'success');
+    });
+
+    document.getElementById('btn-toast-error').addEventListener('click', () => {
+      showToast('Đã có lỗi xảy ra. Vui lòng thử lại!', 'error');
+    });
+
+    const modal = document.getElementById('demo-modal');
+    document.getElementById('btn-open-modal').addEventListener('click', () => {
+      modal.classList.add('is-active');
+    });
+    const closeModal = () => modal.classList.remove('is-active');
+    document.getElementById('demo-modal-close').addEventListener('click', closeModal);
+    document.getElementById('demo-modal-cancel').addEventListener('click', closeModal);
+    document.getElementById('demo-modal-confirm').addEventListener('click', () => {
+      showToast('Đã bấm xác nhận!', 'info');
+      closeModal();
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+  </script>
+</body>
+</html>

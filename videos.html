@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Video - Video Admin</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+  <div id="app-layout">
+    <div class="main-wrapper">
+      <main class="page-container">
+        <!-- Header trang -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-header__title">Quản lý Video</h1>
+            <p class="text-secondary">Danh sách và thông tin chi tiết các video trong hệ thống</p>
+          </div>
+          <div class="page-header__actions" id="admin-actions" style="display: none;">
+            <button id="btn-export-csv" class="btn btn--secondary btn--sm">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              <span>Export CSV</span>
+            </button>
+            <button id="btn-add-video" class="btn btn--primary btn--sm">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+              <span>+ Thêm video</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Thanh lọc & tìm kiếm -->
+        <div class="filter-bar">
+          <div class="filter-bar__search">
+            <input type="text" id="search-input" class="form-input" placeholder="Tìm kiếm theo tiêu đề video (không dấu)...">
+          </div>
+          <div class="filter-bar__actions">
+            <select id="filter-category" class="form-select" style="min-width: 150px;">
+              <option value="">Tất cả danh mục</option>
+            </select>
+
+            <select id="filter-status" class="form-select" style="min-width: 140px;">
+              <option value="">Tất cả trạng thái</option>
+              <option value="PUBLISHED">PUBLISHED</option>
+              <option value="DRAFT">DRAFT</option>
+              <option value="HIDDEN">HIDDEN</option>
+            </select>
+
+            <select id="sort-select" class="form-select" style="min-width: 170px;">
+              <option value="newest">Mới nhất</option>
+              <option value="oldest">Cũ nhất</option>
+              <option value="views-desc">Nhiều view nhất</option>
+              <option value="views-asc">Ít view nhất</option>
+              <option value="title-az">Tiêu đề A–Z</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Khung bảng danh sách -->
+        <div class="table-container">
+          <table class="table" id="video-table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">ID</th>
+                <th style="width: 120px;">Thumbnail</th>
+                <th>Title</th>
+                <th style="width: 140px; text-align: right;">Views</th>
+                <th id="th-action" style="width: 150px; text-align: center;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="video-table-body">
+              <!-- Sẽ render động -->
+            </tbody>
+          </table>
+
+          <!-- Trạng thái trống -->
+          <div id="table-empty-state" class="empty-state" style="display: none;">
+            <svg class="empty-state__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            <h4 class="empty-state__title">Không tìm thấy video nào</h4>
+            <p class="empty-state__desc">Thử thay đổi từ khóa tìm kiếm hoặc bỏ các bộ lọc để xem kết quả.</p>
+          </div>
+
+          <!-- Thanh phân trang 10 dòng/trang -->
+          <div class="pagination" id="table-pagination">
+            <div class="pagination__info" id="pagination-info">
+              Đang tải dữ liệu...
+            </div>
+            <div class="pagination__controls" id="pagination-controls">
+              <!-- Nút trang -->
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Thêm / Sửa Video (Chỉ ADMIN) -->
+  <div id="video-modal" class="modal-overlay">
+    <div class="modal-dialog" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="video-modal-title">Thêm video mới</h3>
+        <button id="video-modal-close" class="modal-close">&times;</button>
+      </div>
+      <form id="video-form" novalidate>
+        <input type="hidden" id="video-id">
+        <div class="modal-body" style="max-height: 70vh;">
+          <div class="form-group">
+            <label for="form-video-title" class="form-label form-label--required">Tiêu đề video</label>
+            <input type="text" id="form-video-title" class="form-input" placeholder="Từ 3 đến 150 ký tự" required>
+            <div id="err-video-title" class="form-error"></div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label for="form-video-category" class="form-label form-label--required">Danh mục</label>
+              <select id="form-video-category" class="form-select" required>
+                <!-- Đổ danh mục động -->
+              </select>
+              <div id="err-video-category" class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="form-video-status" class="form-label">Trạng thái</label>
+              <select id="form-video-status" class="form-select">
+                <option value="PUBLISHED">PUBLISHED</option>
+                <option value="DRAFT">DRAFT</option>
+                <option value="HIDDEN">HIDDEN</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-video-desc" class="form-label">Mô tả</label>
+            <textarea id="form-video-desc" class="form-textarea" placeholder="Mô tả nội dung video..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="form-video-thumb" class="form-label">Thumbnail URL</label>
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="flex: 1;">
+                <input type="text" id="form-video-thumb" class="form-input" placeholder="assets/img/thumb-01.jpg hoặc link web">
+                <div class="form-help">Xem trước ảnh bên cạnh. Có thể dùng đường dẫn ảnh hoặc link ngoài.</div>
+              </div>
+              <img id="thumb-preview" src="assets/img/thumb-placeholder.jpg" alt="Preview" class="table-thumbnail" style="width: 96px; height: 54px; flex-shrink: 0;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-video-url" class="form-label">Video URL</label>
+            <input type="text" id="form-video-url" class="form-input" placeholder="https://example.com/v/1">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label for="form-video-duration" class="form-label">Thời lượng (giây)</label>
+              <input type="number" id="form-video-duration" class="form-input" min="0" placeholder="vd: 1800">
+            </div>
+
+            <div class="form-group">
+              <label for="form-video-size-mb" class="form-label">Dung lượng file (MB)</label>
+              <input type="number" id="form-video-size-mb" class="form-input" min="0" step="0.1" placeholder="vd: 250">
+              <div class="form-help">Tự động quy đổi sang bytes khi lưu</div>
+            </div>
+          </div>
+
+          <!-- Lượt xem chỉ hiện khi sửa -->
+          <div class="form-group" id="form-group-views" style="display: none;">
+            <label for="form-video-views" class="form-label">Lượt xem (Views)</label>
+            <input type="number" id="form-video-views" class="form-input" min="0">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-modal" class="btn btn--secondary">Hủy bỏ</button>
+          <button type="submit" id="btn-save-video" class="btn btn--primary">Lưu thông tin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-container"></div>
+
+  <script type="module" src="js/pages/videos.js"></script>
+</body>
+</html>

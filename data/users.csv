@@ -1,0 +1,5 @@
+﻿id,username,email,password_hash,role,status,avatar_url,created_at,last_login_at
+1,admin1,admin1@gmail.com,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,ADMIN,ACTIVE,assets/img/avatar-admin.png,2026-01-01 08:00:00,2026-10-04 09:00:00
+2,user1,user1@gmail.com,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,USER,ACTIVE,assets/img/avatar-user.png,2026-01-02 09:30:00,2026-10-03 14:15:00
+3,admin2,admin2@gmail.com,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,ADMIN,ACTIVE,,2026-01-10 11:20:00,2026-09-20 18:30:00
+4,locked_user,locked@gmail.com,8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92,USER,LOCKED,,2026-02-15 16:45:00,2026-03-01 10:00:00

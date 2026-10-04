@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Danh mục - Video Admin</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+  <div id="app-layout">
+    <div class="main-wrapper">
+      <main class="page-container">
+        <!-- Header -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-header__title">Quản lý Danh mục</h1>
+            <p class="text-secondary">Phân loại chủ đề và quản lý danh mục video</p>
+          </div>
+          <div class="page-header__actions">
+            <button id="btn-add-category" class="btn btn--primary btn--sm">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+              <span>+ Thêm danh mục</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+          <div class="filter-bar__search">
+            <input type="text" id="cat-search" class="form-input" placeholder="Tìm kiếm theo tên danh mục hoặc slug...">
+          </div>
+        </div>
+
+        <!-- Bảng Danh mục -->
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">ID</th>
+                <th>Tên danh mục</th>
+                <th>Slug</th>
+                <th style="width: 130px; text-align: right;">Số video</th>
+                <th style="width: 170px;">Ngày tạo</th>
+                <th style="width: 150px; text-align: center;">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="category-table-body">
+              <!-- Render động -->
+            </tbody>
+          </table>
+
+          <div id="cat-empty-state" class="empty-state" style="display: none;">
+            <svg class="empty-state__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+            <h4 class="empty-state__title">Không có danh mục nào</h4>
+            <p class="empty-state__desc">Bấm nút "+ Thêm danh mục" để tạo mới danh mục đầu tiên.</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Thêm / Sửa Danh mục -->
+  <div id="category-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="cat-modal-title">Thêm danh mục mới</h3>
+        <button id="cat-modal-close" class="modal-close">&times;</button>
+      </div>
+      <form id="category-form" novalidate>
+        <input type="hidden" id="cat-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="form-cat-name" class="form-label form-label--required">Tên danh mục</label>
+            <input type="text" id="form-cat-name" class="form-input" placeholder="vd: Học tập & Hướng dẫn" required>
+            <div id="err-cat-name" class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="form-cat-slug" class="form-label form-label--required">Slug (đường dẫn định danh)</label>
+            <input type="text" id="form-cat-slug" class="form-input" placeholder="vd: hoc-tap-va-huong-dan" required>
+            <div class="form-help">Tự động sinh từ tên danh mục. Bạn cũng có thể sửa lại theo ý muốn.</div>
+            <div id="err-cat-slug" class="form-error"></div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="form-cat-desc" class="form-label">Mô tả</label>
+            <textarea id="form-cat-desc" class="form-textarea" placeholder="Mô tả mục đích của danh mục..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-cat-modal" class="btn btn--secondary">Hủy bỏ</button>
+          <button type="submit" id="btn-save-cat" class="btn btn--primary">Lưu danh mục</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-container"></div>
+
+  <script type="module" src="js/pages/categories.js"></script>
+</body>
+</html>

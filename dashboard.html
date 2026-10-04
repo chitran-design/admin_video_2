@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Video Admin</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <!-- Chart.js qua CDN theo yêu cầu PRD & Architecture -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <div id="app-layout">
+    <!-- Sidebar và Topbar sẽ được render bởi sidebar.js -->
+    <div class="main-wrapper">
+      <main class="page-container">
+        <div class="page-header">
+          <div>
+            <h1 class="page-header__title">Bảng điều khiển</h1>
+            <p class="text-secondary">Tổng quan thống kê kho video và lượt xem</p>
+          </div>
+          <div class="page-header__actions">
+            <a href="videos.html" class="btn btn--secondary btn--sm">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              <span>Xem danh sách Video</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3 Thẻ số liệu chính -->
+        <div class="grid-stats">
+          <!-- Card 1: Tổng video -->
+          <div class="stat-card stat-card--primary">
+            <div class="stat-card__icon">
+              <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            </div>
+            <div class="stat-card__content">
+              <div class="stat-card__title">Tổng số video</div>
+              <div class="stat-card__value" id="stat-total-videos">-</div>
+              <div class="stat-card__sub" id="stat-published-videos">- video đã xuất bản</div>
+            </div>
+          </div>
+
+          <!-- Card 2: Tổng lượt xem -->
+          <div class="stat-card stat-card--success">
+            <div class="stat-card__icon">
+              <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+            </div>
+            <div class="stat-card__content">
+              <div class="stat-card__title">Tổng lượt xem</div>
+              <div class="stat-card__value" id="stat-total-views" title="Lượt xem">-</div>
+              <div class="stat-card__sub">Toàn bộ thời gian</div>
+            </div>
+          </div>
+
+          <!-- Card 3: Dung lượng storage -->
+          <div class="stat-card stat-card--warning">
+            <div class="stat-card__icon">
+              <svg width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7z"></path><path d="M9 12h6m-6 4h4"></path></svg>
+            </div>
+            <div class="stat-card__content">
+              <div class="stat-card__title">Dung lượng lưu trữ</div>
+              <div class="stat-card__value" id="stat-storage-size">-</div>
+              <div class="stat-card__sub">Tổng dung lượng file</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Biểu đồ -->
+        <div class="grid-charts">
+          <!-- Chart 1: Top 10 Video -->
+          <div class="card">
+            <div class="card__header">
+              <div>
+                <h3 class="card__title">Top 10 video nhiều lượt xem nhất</h3>
+                <p class="card__subtitle">Xếp hạng theo tổng số lượt xem giảm dần</p>
+              </div>
+            </div>
+            <div class="card__body">
+              <div style="position: relative; height: 320px; width: 100%;">
+                <canvas id="chart-top-videos"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart 2: Lượt xem theo thời gian -->
+          <div class="card">
+            <div class="card__header">
+              <div>
+                <h3 class="card__title">Lượt xem theo thời gian</h3>
+                <p class="card__subtitle">Thống kê xu hướng xem video trong hệ thống</p>
+              </div>
+              <div class="d-flex gap-2">
+                <button id="btn-view-days" class="btn btn--primary btn--sm">Theo ngày (30 ngày)</button>
+                <button id="btn-view-months" class="btn btn--secondary btn--sm">Theo tháng (12 tháng)</button>
+              </div>
+            </div>
+            <div class="card__body">
+              <div style="position: relative; height: 320px; width: 100%;">
+                <canvas id="chart-views-trend"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-container"></div>
+
+  <script type="module" src="js/pages/dashboard.js"></script>
+</body>
+</html>

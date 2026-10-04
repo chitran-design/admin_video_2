@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đăng nhập - Video Admin</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/auth.css">
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <img src="assets/img/logo.svg" alt="Video Admin Logo" class="auth-logo">
+        <h1 class="auth-title">Đăng nhập</h1>
+        <p class="auth-desc">Quản lý kho video của bạn</p>
+      </div>
+
+      <div id="alert-box" style="display: none;"></div>
+
+      <form id="login-form" class="auth-form" novalidate>
+        <div class="form-group">
+          <label for="email" class="form-label form-label--required">Email</label>
+          <input type="email" id="email" class="form-input" placeholder="admin1@gmail.com" required autocomplete="email">
+          <div id="email-error" class="form-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="password" class="form-label form-label--required">Mật khẩu</label>
+          <div class="input-icon-wrapper">
+            <input type="password" id="password" class="form-input" placeholder="Nhập mật khẩu" required autocomplete="current-password">
+            <button type="button" id="toggle-password" class="input-icon-btn" aria-label="Hiện/ẩn mật khẩu">
+              <svg id="eye-icon" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+          </div>
+          <div id="password-error" class="form-error"></div>
+        </div>
+
+        <div class="auth-options">
+          <label class="form-check">
+            <input type="checkbox" id="remember-me">
+            <span>Ghi nhớ đăng nhập</span>
+          </label>
+          <a href="forgot-password.html">Quên mật khẩu?</a>
+        </div>
+
+        <button type="submit" id="btn-submit" class="btn btn--primary w-100" style="height: 42px;">
+          Đăng nhập
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a>
+      </div>
+
+      <!-- Khung gợi ý tài khoản mẫu để thực hành -->
+      <div class="auth-callout" style="margin-top: 24px; margin-bottom: 0;">
+        <div class="auth-callout__title">Tài khoản mẫu:</div>
+        <div>Admin: <code>admin1@gmail.com</code> | <code>123456</code></div>
+        <div style="margin-top: 4px;">User: <code>user1@gmail.com</code> | <code>123456</code></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-container"></div>
+
+  <script type="module" src="js/pages/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản lý Người dùng - Video Admin</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+  <div id="app-layout">
+    <div class="main-wrapper">
+      <main class="page-container">
+        <!-- Header -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-header__title">Quản lý Người dùng</h1>
+            <p class="text-secondary">Phân quyền, tài khoản và trạng thái hoạt động trong hệ thống</p>
+          </div>
+          <div class="page-header__actions">
+            <button id="btn-add-user" class="btn btn--primary btn--sm">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+              <span>+ Thêm người dùng</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter bar -->
+        <div class="filter-bar">
+          <div class="filter-bar__search">
+            <input type="text" id="user-search" class="form-input" placeholder="Tìm theo username hoặc email...">
+          </div>
+          <div class="filter-bar__actions">
+            <select id="user-role-filter" class="form-select" style="min-width: 140px;">
+              <option value="">Tất cả vai trò</option>
+              <option value="ADMIN">ADMIN</option>
+              <option value="USER">USER</option>
+            </select>
+
+            <select id="user-status-filter" class="form-select" style="min-width: 150px;">
+              <option value="">Tất cả trạng thái</option>
+              <option value="ACTIVE">ACTIVE (Hoạt động)</option>
+              <option value="LOCKED">LOCKED (Đã khóa)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Bảng Users -->
+        <div class="table-container">
+          <table class="table">
+            <thead>
+              <tr>
+                <th style="width: 70px;">ID</th>
+                <th>Người dùng</th>
+                <th>Email</th>
+                <th style="width: 110px;">Vai trò</th>
+                <th style="width: 120px;">Trạng thái</th>
+                <th style="width: 160px;">Ngày tạo</th>
+                <th style="width: 180px; text-align: center;">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="user-table-body">
+              <!-- Render động -->
+            </tbody>
+          </table>
+
+          <div id="user-empty-state" class="empty-state" style="display: none;">
+            <svg class="empty-state__icon" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            <h4 class="empty-state__title">Không tìm thấy người dùng nào</h4>
+            <p class="empty-state__desc">Thử tìm kiếm với từ khóa khác.</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Thêm Người dùng mới -->
+  <div id="add-user-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Thêm người dùng mới</h3>
+        <button id="add-user-close" class="modal-close">&times;</button>
+      </div>
+      <form id="add-user-form" novalidate>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="new-u-username" class="form-label form-label--required">Tên đăng nhập</label>
+            <input type="text" id="new-u-username" class="form-input" placeholder="nguyen_van_a" required>
+            <div id="err-new-u-username" class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="new-u-email" class="form-label form-label--required">Email</label>
+            <input type="email" id="new-u-email" class="form-input" placeholder="a@gmail.com" required>
+            <div id="err-new-u-email" class="form-error"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="new-u-password" class="form-label form-label--required">Mật khẩu ban đầu</label>
+            <input type="password" id="new-u-password" class="form-input" placeholder="Tối thiểu 6 ký tự" required>
+            <div id="err-new-u-password" class="form-error"></div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label for="new-u-role" class="form-label">Vai trò</label>
+              <select id="new-u-role" class="form-select">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="new-u-status" class="form-label">Trạng thái</label>
+              <select id="new-u-status" class="form-select">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="LOCKED">LOCKED</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-add-user" class="btn btn--secondary">Hủy bỏ</button>
+          <button type="submit" id="btn-submit-add-user" class="btn btn--primary">Thêm tài khoản</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Chỉnh sửa Người dùng -->
+  <div id="edit-user-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title" id="edit-user-title">Chỉnh sửa người dùng</h3>
+        <button id="edit-user-close" class="modal-close">&times;</button>
+      </div>
+      <form id="edit-user-form" novalidate>
+        <input type="hidden" id="edit-u-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Tên đăng nhập</label>
+            <input type="text" id="edit-u-username" class="form-input" disabled style="background-color: var(--bg-hover);">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="text" id="edit-u-email" class="form-input" disabled style="background-color: var(--bg-hover);">
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label for="edit-u-role" class="form-label form-label--required">Vai trò</label>
+              <select id="edit-u-role" class="form-select">
+                <option value="USER">USER</option>
+                <option value="ADMIN">ADMIN</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="edit-u-status" class="form-label form-label--required">Trạng thái</label>
+              <select id="edit-u-status" class="form-select">
+                <option value="ACTIVE">ACTIVE</option>
+                <option value="LOCKED">LOCKED</option>
+              </select>
+            </div>
+          </div>
+
+          <hr style="border: 0; border-top: 1px solid var(--border); margin: 16px 0;">
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="edit-u-reset-pass" class="form-label">Đặt lại mật khẩu mới (Tùy chọn)</label>
+            <input type="password" id="edit-u-reset-pass" class="form-input" placeholder="Để trống nếu giữ nguyên mật khẩu cũ">
+            <div id="err-edit-u-pass" class="form-error"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btn-cancel-edit-user" class="btn btn--secondary">Hủy bỏ</button>
+          <button type="submit" id="btn-submit-edit-user" class="btn btn--primary">Lưu thay đổi</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-container"></div>
+
+  <script type="module" src="js/pages/users.js"></script>
+</body>
+</html>

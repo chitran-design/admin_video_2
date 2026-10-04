@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Database & CSV - Video Admin</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    body { padding: 40px; }
+    .box { background: #fff; padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 20px; }
+    pre { background: #0f172a; color: #38bdf8; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div style="max-width: 900px; margin: 0 auto;">
+    <h1>Kiểm tra lớp dữ liệu (db.js & csv.js)</h1>
+    <p class="text-secondary" style="margin-bottom: 20px;">Mở Console (F12) để xem chi tiết các kiểm tra tự động.</p>
+
+    <div class="box">
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <button id="btn-init" class="btn btn--primary">1. Chạy db.init()</button>
+        <button id="btn-export-videos" class="btn btn--secondary">2. Thử Export videos.csv</button>
+        <button id="btn-reset" class="btn btn--danger">3. Reset về CSV gốc</button>
+      </div>
+      <div id="output-status" class="alert alert--info">Đang chờ bạn bấm kiểm tra...</div>
+      <pre id="output-json">// Dữ liệu hiển thị ở đây</pre>
+    </div>
+  </div>
+
+  <script type="module">
+    import { db } from './js/core/db.js';
+    import * as csv from './js/core/csv.js';
+
+    window.db = db;
+    window.csv = csv;
+
+    const statusEl = document.getElementById('output-status');
+    const jsonEl = document.getElementById('output-json');
+
+    async function runTest() {
+      try {
+        statusEl.className = 'alert alert--info';
+        statusEl.textContent = 'Đang khởi tạo cơ sở dữ liệu...';
+        await db.init();
+        const users = db.getAll('users');
+        const videos = db.getAll('videos');
+        const categories = db.getAll('video_categories');
+        const views = db.getAll('video_views_daily');
+
+        statusEl.className = 'alert alert--success';
+        statusEl.textContent = `Khởi tạo thành công! Users: ${users.length}, Videos: ${videos.length}, Categories: ${categories.length}, Daily Views: ${views.length}`;
+        
+        jsonEl.textContent = JSON.stringify({
+          sampleUser: users[0],
+          sampleVideo: videos[0],
+          sampleCategory: categories[0]
+        }, null, 2);
+
+        console.log('--- TEST DB ---');
+        console.log('Users:', users);
+        console.log('Videos:', videos);
+        console.log('Categories:', categories);
+        console.log('Daily Views count:', views.length);
+      } catch (err) {
+        statusEl.className = 'alert alert--danger';
+        statusEl.textContent = 'Lỗi: ' + err.message;
+        console.error(err);
+      }
+    }
+
+    document.getElementById('btn-init').addEventListener('click', runTest);
+
+    document.getElementById('btn-export-videos').addEventListener('click', () => {
+      db.exportCsv('videos');
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', async () => {
+      if (confirm('Bạn có chắc muốn xóa localStorage và nạp lại từ file CSV gốc?')) {
+        await db.reset();
+        await runTest();
+      }
+    });
+
+    // Tự động chạy lần đầu
+    runTest();
+  </script>
+</body>
+</html>

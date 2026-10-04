@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Admin</title>
+</head>
+<body>
+  <script type="module">
+    import { auth } from './js/core/auth.js';
+    const user = auth.currentUser();
+    if (user) {
+      window.location.replace('dashboard.html');
+    } else {
+      window.location.replace('login.html');
+    }
+  </script>
+</body>
+</html>
